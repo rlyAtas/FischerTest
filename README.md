@@ -1,7 +1,9 @@
 # FischerTest
 
-**Тип продукта:** веб- и мобильное приложение для подготовки к теоретической части экзамена `Fischereiprüfung` в Германии  
+**Тип продукта:** веб- и мобильное приложение для подготовки к теоретической части экзамена `Fischereiprüfung` в Германии 
+
 **Рабочее название:** `FischerTest`
+
 **Варианты:** Angelschein, AngelscheinTest, AngelTest
 
 ## Цель проекта
@@ -34,6 +36,7 @@
 ## Стек технологий
 
 **Backend:** Next.js + TypeScript + PostgreSQL + Prisma
+
 **Frontend:** Next.js App Router + Mantine
 
 

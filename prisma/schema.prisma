@@ -1,0 +1,258 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Справочники
+
+model State {
+  id   Int    @id @default(autoincrement())
+  code String @unique
+  name String @unique
+
+  topics         Topic[]
+  users          User[]
+  trainings      Training[]
+  userProgresses UserProgress[]
+
+  @@map("state")
+}
+
+model Topic {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  stateId Int
+  state   State @relation(fields: [stateId], references: [id])
+
+  items     Item[]
+  trainings Training[]
+
+  @@unique([stateId, name])
+  @@map("topic")
+}
+
+model Language {
+  id   Int    @id @default(autoincrement())
+  code String @unique
+  name String @unique
+
+  itemTranslations   ItemTranslation[]
+  answerTranslations AnswerTranslation[]
+  users              User[]
+
+  @@map("language")
+}
+
+// База вопросов
+
+model Item {
+  id   Int    @id @default(autoincrement())
+  text String
+
+  topicId Int
+  topic   Topic @relation(fields: [topicId], references: [id])
+
+  answers        Answer[]
+  translations   ItemTranslation[]
+  favorites      Favorite[]
+  trainingItems  TrainingItem[]
+  itemProgresses ItemProgress[]
+
+  @@map("item")
+}
+
+model Answer {
+  id        Int     @id @default(autoincrement())
+  text      String
+  isCorrect Boolean
+
+  itemId Int
+  item   Item @relation(fields: [itemId], references: [id])
+
+  translations  AnswerTranslation[]
+  trainingItems TrainingItem[]
+
+  @@map("answer")
+}
+
+model ItemTranslation {
+  id   Int    @id @default(autoincrement())
+  text String
+
+  itemId Int
+  item   Item @relation(fields: [itemId], references: [id])
+
+  languageId Int
+  language   Language @relation(fields: [languageId], references: [id])
+
+  @@unique([itemId, languageId])
+  @@map("item_translation")
+}
+
+model AnswerTranslation {
+  id   Int    @id @default(autoincrement())
+  text String
+
+  answerId Int
+  answer   Answer @relation(fields: [answerId], references: [id])
+
+  languageId Int
+  language   Language @relation(fields: [languageId], references: [id])
+
+  @@unique([answerId, languageId])
+  @@map("answer_translation")
+}
+
+// Пользователи и авторизация
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  stateId Int
+  state   State @relation(fields: [stateId], references: [id])
+
+  languageId Int
+  language   Language @relation(fields: [languageId], references: [id])
+
+  sessions       Session[]
+  favorites      Favorite[]
+  trainings      Training[]
+  itemProgresses ItemProgress[]
+  userProgresses UserProgress[]
+
+  @@map("user")
+}
+
+model LoginCode {
+  id        Int       @id @default(autoincrement())
+  email     String
+  hash      String
+  attempts  Int       @default(0)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([email])
+  @@map("login_code")
+}
+
+model Session {
+  id             Int       @id @default(autoincrement())
+  tokenHash      String    @unique
+  createdAt      DateTime  @default(now())
+  expiresAt      DateTime
+  lastActivityAt DateTime?
+  revokedAt      DateTime?
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  @@map("session")
+}
+
+// Тренировки
+
+enum TrainingType {
+  topic
+  favorites
+  exam
+}
+
+model Training {
+  id         Int          @id @default(autoincrement())
+  type       TrainingType
+  startedAt  DateTime     @default(now())
+  finishedAt DateTime?
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  stateId Int
+  state   State @relation(fields: [stateId], references: [id])
+
+  topicId Int?
+  topic   Topic? @relation(fields: [topicId], references: [id])
+
+  trainingItems TrainingItem[]
+
+  @@map("training")
+}
+
+model TrainingItem {
+  id         Int       @id @default(autoincrement())
+  position   Int
+  isCorrect  Boolean?
+  answeredAt DateTime?
+
+  trainingId Int
+  training   Training @relation(fields: [trainingId], references: [id])
+
+  itemId Int
+  item   Item @relation(fields: [itemId], references: [id])
+
+  answerId Int?
+  answer   Answer? @relation(fields: [answerId], references: [id])
+
+  @@unique([trainingId, position])
+  @@unique([trainingId, itemId])
+  @@map("training_item")
+}
+
+// Пользовательские учебные данные
+
+model Favorite {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  itemId Int
+  item   Item @relation(fields: [itemId], references: [id])
+
+  @@unique([userId, itemId])
+  @@map("favorite")
+}
+
+enum ItemStatus {
+  problematic
+  learning
+  mastered
+}
+
+model ItemProgress {
+  id             Int        @id @default(autoincrement())
+  status         ItemStatus
+  lastAnsweredAt DateTime
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  itemId Int
+  item   Item @relation(fields: [itemId], references: [id])
+
+  @@unique([userId, itemId])
+  @@map("item_progress")
+}
+
+model UserProgress {
+  id               Int      @id @default(autoincrement())
+  readinessPercent Int
+  updatedAt        DateTime @updatedAt
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  stateId Int
+  state   State @relation(fields: [stateId], references: [id])
+
+  @@unique([userId, stateId])
+  @@map("user_progress")
+}
