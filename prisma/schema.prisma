@@ -28,8 +28,9 @@ model Topic {
   stateId Int
   state   State @relation(fields: [stateId], references: [id])
 
-  items     Item[]
-  trainings Training[]
+  items             Item[]
+  trainings         Training[]
+  topicTranslations TopicTranslation[]
 
   @@unique([stateId, name])
   @@map("topic")
@@ -40,6 +41,7 @@ model Language {
   code String @unique
   name String @unique
 
+  topicTranslations  TopicTranslation[]
   itemTranslations   ItemTranslation[]
   answerTranslations AnswerTranslation[]
   users              User[]
@@ -62,6 +64,7 @@ model Item {
   trainingItems  TrainingItem[]
   itemProgresses ItemProgress[]
 
+  @@unique([topicId, text])
   @@map("item")
 }
 
@@ -76,7 +79,22 @@ model Answer {
   translations  AnswerTranslation[]
   trainingItems TrainingItem[]
 
+  @@unique([itemId, text])
   @@map("answer")
+}
+
+model TopicTranslation {
+  id   Int    @id @default(autoincrement())
+  text String
+
+  topicId Int
+  topic   Topic @relation(fields: [topicId], references: [id])
+
+  languageId Int
+  language   Language @relation(fields: [languageId], references: [id])
+
+  @@unique([topicId, languageId])
+  @@map("topic_translation")
 }
 
 model ItemTranslation {

@@ -1,0 +1,256 @@
+{
+  "topics": [
+    {
+      "name": "Allgemeine Fischkunde",
+      "translations": {
+        "ru": "Общая ихтиология",
+        "en": "General ichthyology"
+      },
+      "questions": [
+        {
+          "text": "Welche Aufgaben erfüllen Rücken- und Afterflossen heimischer Fische?",
+          "translations": {
+            "ru": "Какие функции выполняют спинной и анальный плавники местных рыб?",
+            "en": "What functions do the dorsal and anal fins of native fish perform?"
+          },
+          "answers": [
+            {
+              "text": "Sie dienen der Fortbewegung",
+              "isCorrect": false,
+              "translations": {
+                "ru": "Они служат для передвижения",
+                "en": "They serve for locomotion"
+              }
+            },
+            {
+              "text": "Sie dienen der Steuerung",
+              "isCorrect": false,
+              "translations": {
+                "ru": "Они служат для управления",
+                "en": "They serve for steering"
+              }
+            },
+            {
+              "text": "Sie dienen als Stabilisatoren",
+              "isCorrect": true,
+              "translations": {
+                "ru": "Они служат стабилизаторами",
+                "en": "They serve as stabilizers"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Spezielle Fischkunde",
+      "translations": {
+        "ru": "Специальная ихтиология",
+        "en": "Special ichthyology"
+      },
+      "questions": [
+        {
+          "text": "Welche Arten gehören zu den Rundmäulern?",
+          "translations": {
+            "ru": "Какие виды относятся к круглоротым?",
+            "en": "Which species belong to the roundmouths?"
+          },
+          "answers": [
+            {
+              "text": "Weißfische, Barsche und Forellen",
+              "isCorrect": false,
+              "translations": {
+                "ru": "Карповые, окуни и форели",
+                "en": "Cyprinids, perch and trout"
+              }
+            },
+            {
+              "text": "Bach- und Flussneunaugen",
+              "isCorrect": true,
+              "translations": {
+                "ru": "Ручьевые и речные миноги",
+                "en": "Brook and river lampreys"
+              }
+            },
+            {
+              "text": "Störe",
+              "isCorrect": false,
+              "translations": {
+                "ru": "Осетры",
+                "en": "Sturgeons"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Gewässerkunde und Fischhege",
+      "translations": {
+        "ru": "Водоёмы и рыбохозяйственное управление",
+        "en": "Waters and fisheries management"
+      },
+      "questions": [
+        {
+          "text": "Ist der Sauerstoffgehalt in fließenden Gewässern gewöhnlich höher oder niedriger als in stehenden Gewässern?",
+          "translations": {
+            "ru": "Содержание кислорода в проточных водоёмах обычно выше или ниже, чем в стоячих водоёмах?",
+            "en": "Is the oxygen content in flowing waters usually higher or lower than in standing waters?"
+          },
+          "answers": [
+            {
+              "text": "Es besteht kein Unterschied, da die Aufnahmefähigkeit des Wassers für Sauerstoff immer gleich ist",
+              "isCorrect": false,
+              "translations": {
+                "ru": "Разницы нет, так как способность воды поглощать кислород всегда одинакова",
+                "en": "There is no difference, because water's capacity to absorb oxygen is always the same"
+              }
+            },
+            {
+              "text": "Er ist niedriger wegen der höheren Wassertemperatur",
+              "isCorrect": false,
+              "translations": {
+                "ru": "Оно ниже из-за более высокой температуры воды",
+                "en": "It is lower because of the higher water temperature"
+              }
+            },
+            {
+              "text": "Er ist höher, da durch die Verwirbelung des Wassers mit der Luft ständig Sauerstoff aufgenommen und bis zum Grund verteilt wird",
+              "isCorrect": true,
+              "translations": {
+                "ru": "Оно выше, так как при перемешивании воды с воздухом кислород постоянно поглощается и распределяется до дна",
+                "en": "It is higher, because the turbulence of the water with the air constantly absorbs oxygen and distributes it down to the bottom"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Natur- und Tierschutz",
+      "translations": {
+        "ru": "Охрана природы и защита животных",
+        "en": "Nature conservation and animal welfare"
+      },
+      "questions": [
+        {
+          "text": "Was ist unter Fluchtdistanz zu verstehen?",
+          "translations": {
+            "ru": "Что понимают под дистанцией бегства?",
+            "en": "What is meant by flight distance?"
+          },
+          "answers": [
+            {
+              "text": "Die Entfernung, ab welcher ein Tier vor einem wirklichen oder vermeintlichen Feind flüchtet",
+              "isCorrect": true,
+              "translations": {
+                "ru": "Расстояние, начиная с которого животное убегает от действительного или предполагаемого врага",
+                "en": "The distance from which an animal flees from a real or perceived enemy"
+              }
+            },
+            {
+              "text": "Die von einem gehakten Fisch während der Drillphase zurückgelegte Distanz",
+              "isCorrect": false,
+              "translations": {
+                "ru": "Расстояние, которое проходит подсечённая рыба во время вываживания",
+                "en": "The distance covered by a hooked fish during the fight"
+              }
+            },
+            {
+              "text": "Die im Castingsport beim Werfen erzielte Weite",
+              "isCorrect": false,
+              "translations": {
+                "ru": "Дальность, достигнутая при забросе в кастинговом спорте",
+                "en": "The distance achieved when casting in casting sport"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Gerätekunde",
+      "translations": {
+        "ru": "Рыболовные снасти и оборудование",
+        "en": "Fishing tackle and equipment"
+      },
+      "questions": [
+        {
+          "text": "Welche Eigenschaften sollte eine Angelrute haben?",
+          "translations": {
+            "ru": "Какими свойствами должно обладать удилище?",
+            "en": "What properties should a fishing rod have?"
+          },
+          "answers": [
+            {
+              "text": "Sie muss einen extrem langen Korkgriff haben",
+              "isCorrect": false,
+              "translations": {
+                "ru": "Оно должно иметь чрезвычайно длинную пробковую рукоять",
+                "en": "It must have an extremely long cork handle"
+              }
+            },
+            {
+              "text": "Sie muss grundsätzlich eine weiche Spitzenaktion haben",
+              "isCorrect": false,
+              "translations": {
+                "ru": "Оно в принципе должно иметь мягкий строй вершинки",
+                "en": "It must always have a soft tip action"
+              }
+            },
+            {
+              "text": "Man muss mit ihr gut werfen und den Fisch sicher landen können",
+              "isCorrect": true,
+              "translations": {
+                "ru": "Им должно быть удобно забрасывать и надёжно выводить рыбу",
+                "en": "It must allow good casting and safe landing of the fish"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Gesetzeskunde",
+      "translations": {
+        "ru": "Рыболовное законодательство",
+        "en": "Fisheries law"
+      },
+      "questions": [
+        {
+          "text": "Was versteht man unter einem Mindestmaß?",
+          "translations": {
+            "ru": "Что понимают под минимальным размером?",
+            "en": "What is meant by a minimum size?"
+          },
+          "answers": [
+            {
+              "text": "Die Länge der Satzfische",
+              "isCorrect": false,
+              "translations": {
+                "ru": "Длину посадочной рыбы",
+                "en": "The length of stocked fish"
+              }
+            },
+            {
+              "text": "Die Länge der Laichfische",
+              "isCorrect": false,
+              "translations": {
+                "ru": "Длину нерестовых рыб",
+                "en": "The length of spawning fish"
+              }
+            },
+            {
+              "text": "Die Länge der Fische, ab welcher diese gefangen werden dürfen",
+              "isCorrect": true,
+              "translations": {
+                "ru": "Длину рыб, начиная с которой их разрешено ловить",
+                "en": "The length of fish from which they may be caught"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
