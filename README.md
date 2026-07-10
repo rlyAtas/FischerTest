@@ -1,10 +1,10 @@
 # FischerTest
 
-**Тип продукта:** веб- и мобильное приложение для подготовки к теоретической части экзамена `Fischereiprüfung` в Германии 
+**Тип продукта:** веб- и мобильное приложение для подготовки к теоретической части экзамена `Fischereiprüfung` в Германии.
 
 **Рабочее название:** `FischerTest`
 
-**Варианты:** Angelschein, AngelscheinTest, AngelTest
+**Варианты названия:** `Angelschein`, `AngelscheinTest`, `AngelTest`
 
 ## Цель проекта
 
@@ -14,7 +14,7 @@
 
 ## Задачи проекта
 
-**Сервис должен:**
+Сервис должен:
 
 - обучать теории по темам экзамена;
 - давать доступ к базе вопросов;
@@ -24,27 +24,135 @@
 - позволять пользователям повторять выборочные вопросы;
 - сохранять прогресс;
 - поддерживать только землю NRW;
-- поддерживать несколько языков интерфейса: немецкий, английский, русский.
+- поддерживать немецкий язык вопросов и переводы интерфейса/учебных данных на английский и русский.
 
 ## Целевая аудитория
 
-**Основная аудитория:**
+Основная аудитория:
 
 - пользователи, готовящиеся к `Fischereiprüfung`;
 - мигранты и иностранцы, которым нужен более понятный формат обучения.
 
+## Статус проекта
+
+Проект находится на этапе MVP. Сейчас подготовлены технический каркас, Prisma-схема, миграции и seed начальных данных.
+
+Актуальный план работ находится в `.temp/plan.md`.
+
 ## Стек технологий
 
-**Backend:** Next.js + TypeScript + PostgreSQL + Prisma
+**Runtime:** Node.js 22.12+
 
-**Frontend:** Next.js App Router + Mantine
+**Backend:** Next.js 16.2, TypeScript 5.9, PostgreSQL 16, Prisma 7.8
 
+**Frontend:** React 19.2, Next.js 16.2, Mantine UI 9.1
 
-## Установка
+**Инструменты:** Biome 2.2, Vitest 4.1, tsx 4.22
+
+## Требования
+
+- Node.js 22.12 или выше;
+- npm;
+- PostgreSQL 16;
+- доступная локальная или удаленная база данных PostgreSQL.
+
+## Переменные окружения
+
+**DATABASE_URL** для подключения к PostgreSQL, используется Prisma Client, миграциями и seed.
+
+Пример формата:
+
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/fischer_test"
+```
+
+## Проверки
+
+Проверка типов:
+
+```bash
+npm run typecheck
+```
+
+Линтинг и форматирование:
+
+```bash
+npm run lint
+```
+
+Тесты:
+
+```bash
+npm run test
+```
+
+Production-сборка:
+
+```bash
+npm run build
+```
+
+## Локальная установка
+
+Сценарий для разработки на локальной машине.
+
+```bash
+git clone <repository-url>
+cd FischerTest
+cp .env.example .env
+npm ci
+npm run prisma:generate
+npm run prisma:migrate
+npm run prisma:seed
+npm run dev
+```
+
+После команды `cp .env.example .env` заполните `DATABASE_URL` в `.env`.
+
+Перед выполнением миграций создайте PostgreSQL-базу любым удобным способом.
+
+После запуска приложение доступно по адресу `http://localhost:3000`.
+
+## Production-установка с нуля
+
+Сценарий для первичного разворачивания production-сборки на сервере или в окружении деплоя.
+
+```bash
+git clone <repository-url>
+cd FischerTest
+npm ci
+npm run prisma:generate
+npm run prisma:deploy
+npm run prisma:seed
+npm run build
+npm prune --omit=dev
+npm start
+```
+
+Перед запуском задайте production-значение `DATABASE_URL` в переменных окружения деплоя.
+
+## Production-обновление
+
+Сценарий для выкладки новой версии в уже развернутое production-окружение.
 
 ```bash
 git pull
 npm ci
+npm run prisma:generate
+npm run prisma:deploy
 npm run build
-npm ci --omit=dev
+npm prune --omit=dev
 npm start
+```
+
+Используйте `npm run prisma:seed` отдельно при изменении начальных справочников, банка вопросов, переводов или логики наполнения данных.
+
+
+## Документация
+
+- `documentation/data-model.md` — сущности и связи;
+- `documentation/business-rules.md` — бизнес-правила тренировок и прогресса;
+- `documentation/exam-rules.md` — правила экзамена NRW;
+- `documentation/auth-and-user-states.md` — авторизация и пользовательские состояния;
+- `documentation/pages.md` — основные экраны;
+- `SOURCES.md` — источники данных и дисклеймеры.
