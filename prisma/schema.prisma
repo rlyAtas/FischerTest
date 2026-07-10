@@ -178,6 +178,7 @@ model Session {
 // Тренировки
 
 enum TrainingType {
+  all
   topic
   favorites
   exam
