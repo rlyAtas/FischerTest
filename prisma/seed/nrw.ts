@@ -1,4 +1,4 @@
-import { topics } from '../../data/nrw.private.json';
+import { topics } from '../../data/nrw.json';
 import { prisma } from '../../src/lib/prisma';
 
 type TranslationMap = Record<string, string>;
