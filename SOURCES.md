@@ -11,6 +11,12 @@ Die deutschen Frage- und Antworttexte in `data/nrw.json` basieren auf dem offizi
 
 Das Dokument ist auf dem offiziellen Rechtsportal des Landes Nordrhein-Westfalen veröffentlicht.
 
+### Regeln der Fischerprüfung NRW
+
+Die Regeln der Fischerprüfung NRW basieren auf der aktuellen offiziellen Fischerprüfungsordnung. Das Projekt verwendet daraus die Regeln des theoretischen Prüfungsteils:
+
+- https://recht.nrw.de/lrgv/rechtsverordnung/03072026-verordnung-ueber-die-fischerpruefung/
+
 ### Übersetzungen
 
 Die russischen und englischen Übersetzungen in `data/nrw.json` wurden im Rahmen dieses Projekts erstellt.
@@ -39,6 +45,12 @@ Verweise auf offizielle Materialien dienen ausschließlich dazu, die Herkunft de
 - https://recht.nrw.de/system/files/BA/4679-28681-sgv_793_19971126_1_anlage1.pdf
 
 Документ опубликован на официальном правовом портале земли Nordrhein-Westfalen.
+
+### Правила экзамена NRW
+
+Правила экзамена NRW основаны на актуальной официальной Fischerprüfungsordnung. Проект использует из неё правила теоретической части экзамена:
+
+- https://recht.nrw.de/lrgv/rechtsverordnung/03072026-verordnung-ueber-die-fischerpruefung/
 
 ### Переводы
 
