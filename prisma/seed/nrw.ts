@@ -1,6 +1,8 @@
 import { topics } from '../../data/nrw.json';
 import { prisma } from '../../src/lib/prisma';
 
+const baseContentLanguageCode = 'de';
+
 type TranslationMap = Record<string, string>;
 type SeedAnswer = {
   text: string;
@@ -30,6 +32,7 @@ function validateDataNRW(languages: ExistingLanguage[]) {
     }
     // Each topic must have translations for all languages
     for (const language of languages) {
+      if (language.code === baseContentLanguageCode) continue;
       if (!topic.translations[language.code]) {
         throw new Error(
           `${topic.name}: topic must have translations for language ${language.code}`,
@@ -49,6 +52,7 @@ function validateDataNRW(languages: ExistingLanguage[]) {
       }
       // Each question must have translations for all languages
       for (const language of languages) {
+        if (language.code === baseContentLanguageCode) continue;
         if (!question.translations[language.code]) {
           throw new Error(
             `${topic.name} | ${question.text}: question must have translation for ${language.code}`,
@@ -80,6 +84,7 @@ function validateDataNRW(languages: ExistingLanguage[]) {
 
         // Each answer must have translations for all languages
         for (const language of languages) {
+          if (language.code === baseContentLanguageCode) continue;
           if (!answer.translations[language.code]) {
             throw new Error(
               `${topic.name} | ${question.text} | ${answer.text}: answer must have translation for ${language.code}`,
@@ -109,6 +114,7 @@ async function seedTranslations(
   upsertTranslation: (languageId: number, text: string) => Promise<void>,
 ) {
   for (const [languageCode, text] of Object.entries(translations)) {
+    if (languageCode === baseContentLanguageCode) continue;
     const language = getLanguage(existingLanguages, languageCode);
     await upsertTranslation(language.id, text);
   }
