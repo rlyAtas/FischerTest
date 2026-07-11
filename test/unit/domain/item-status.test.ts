@@ -1,6 +1,24 @@
 import { describe, expect, it } from 'vitest';
 
-import { changeItemStatus, type ItemStatus } from '../../../src/domain/item-status';
+import {
+  changeItemStatus,
+  getCurrentItemStatus,
+  type ItemStatus,
+} from '../../../src/domain/item-status';
+
+describe('getCurrentItemStatus', () => {
+  it.each<{
+    itemProgress: { status: Exclude<ItemStatus, 'new'> } | null;
+    expectedStatus: ItemStatus;
+  }>([
+    { itemProgress: null, expectedStatus: 'new' },
+    { itemProgress: { status: 'problematic' }, expectedStatus: 'problematic' },
+    { itemProgress: { status: 'learning' }, expectedStatus: 'learning' },
+    { itemProgress: { status: 'mastered' }, expectedStatus: 'mastered' },
+  ])('returns $expectedStatus', ({ itemProgress, expectedStatus }) => {
+    expect(getCurrentItemStatus(itemProgress)).toBe(expectedStatus);
+  });
+});
 
 describe('changeItemStatus', () => {
   it.each<{
