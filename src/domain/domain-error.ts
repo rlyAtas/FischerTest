@@ -1,7 +1,8 @@
-export type DomainErrorCode = 'empty_favorites_training';
+export type DomainErrorCode = 'empty_favorites_training' | 'answer_does_not_belong_to_item';
 
 const domainErrorMessages: Record<DomainErrorCode, string> = {
   empty_favorites_training: 'Cannot create favorites training without favorite items.',
+  answer_does_not_belong_to_item: 'Answer does not belong to item.',
 };
 
 export class DomainError extends Error {
