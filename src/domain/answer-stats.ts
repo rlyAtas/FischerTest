@@ -7,13 +7,15 @@ export type TrainingStats = {
   answeredQuestions: number;
   correctAnswers: number;
   wrongAnswers: number;
+  unansweredQuestions: number;
 };
 
-export function calculateTrainingStats(answers: readonly Answer[]): TrainingStats {
+export function calculateAnswerStats(answers: readonly Answer[]): TrainingStats {
   return {
     totalQuestions: answers.length,
     answeredQuestions: answers.filter((answer) => answer.isCorrect !== null).length,
     correctAnswers: answers.filter((answer) => answer.isCorrect === true).length,
     wrongAnswers: answers.filter((answer) => answer.isCorrect === false).length,
+    unansweredQuestions: answers.filter((answer) => answer.isCorrect === null).length,
   };
 }
