@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { type Answer, calculateAnswerStats } from '../../../src/domain/answer-stats';
+import { type AnswerStatsItem, calculateAnswerStats } from '../../../src/domain/answer-stats';
 
-describe('calculateTrainingStats', () => {
+describe('calculateAnswerStats', () => {
   it('calculates stats for answered and unanswered questions', () => {
-    const answers: Answer[] = [
+    const answers: AnswerStatsItem[] = [
       { isCorrect: true },
       { isCorrect: false },
       { isCorrect: true },

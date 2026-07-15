@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  calculateItemStatusStats,
   changeItemStatus,
   getCurrentItemStatus,
   type ItemStatus,
+  type ItemWithProgress,
 } from '../../../src/domain/item-status';
 
 describe('getCurrentItemStatus', () => {
@@ -40,4 +42,42 @@ describe('changeItemStatus', () => {
       expect(changeItemStatus(currentStatus, isAnswerCorrect)).toBe(expectedStatus);
     },
   );
+});
+
+describe('calculateItemStatusStats', () => {
+  it('counts items by current status', () => {
+    const items: ItemWithProgress[] = [
+      { itemProgress: null },
+      { itemProgress: null },
+      { itemProgress: { status: 'problematic' } },
+      { itemProgress: { status: 'learning' } },
+      { itemProgress: { status: 'mastered' } },
+      { itemProgress: { status: 'mastered' } },
+    ];
+
+    expect(calculateItemStatusStats(items)).toStrictEqual({
+      new: 2,
+      problematic: 1,
+      learning: 1,
+      mastered: 2,
+    });
+  });
+
+  it('counts items without progress as new', () => {
+    expect(calculateItemStatusStats([{ itemProgress: null }])).toStrictEqual({
+      new: 1,
+      problematic: 0,
+      learning: 0,
+      mastered: 0,
+    });
+  });
+
+  it('returns zero stats for empty item list', () => {
+    expect(calculateItemStatusStats([])).toStrictEqual({
+      new: 0,
+      problematic: 0,
+      learning: 0,
+      mastered: 0,
+    });
+  });
 });

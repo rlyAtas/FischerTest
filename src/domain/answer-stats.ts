@@ -1,8 +1,8 @@
-export type Answer = {
+export type AnswerStatsItem = {
   isCorrect: boolean | null;
 };
 
-export type TrainingStats = {
+export type AnswerStats = {
   totalQuestions: number;
   answeredQuestions: number;
   correctAnswers: number;
@@ -10,7 +10,7 @@ export type TrainingStats = {
   unansweredQuestions: number;
 };
 
-export function calculateAnswerStats(answers: readonly Answer[]): TrainingStats {
+export function calculateAnswerStats(answers: readonly AnswerStatsItem[]): AnswerStats {
   return {
     totalQuestions: answers.length,
     answeredQuestions: answers.filter((answer) => answer.isCorrect !== null).length,
