@@ -20,6 +20,7 @@ export function buildExamItems<ItemType extends ExamItem>(
 ): ItemType[] {
   const examItems: ItemType[] = [];
 
+  // сортируем, чтобы результат был детерминирован
   const topicIds = [...new Set(items.map((item) => item.topicId))].sort((a, b) => a - b);
 
   for (const topicId of topicIds) {
@@ -32,7 +33,7 @@ export function buildExamItems<ItemType extends ExamItem>(
 }
 
 /**
- * Формирования вопросов для эмуляции экзамена в рамках одной темы
+ * Формирование вопросов для эмуляции экзамена в рамках одной темы
  */
 function selectExamTopicItems<ItemType extends ExamTopicItem>(
   items: readonly ItemType[],

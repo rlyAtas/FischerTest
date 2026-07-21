@@ -2,11 +2,20 @@ export type ItemStatus = 'new' | 'problematic' | 'learning' | 'mastered';
 
 type StoredItemStatus = Exclude<ItemStatus, 'new'>;
 
-export function getCurrentItemStatus(
-  itemProgress: { status: StoredItemStatus } | null,
-): ItemStatus {
+export function getCurrentItemStatus(itemProgress: { status: StoredItemStatus } | null): ItemStatus {
   return itemProgress?.status ?? 'new';
 }
+
+export type ItemStatusStats = {
+  new: number;
+  problematic: number;
+  learning: number;
+  mastered: number;
+};
+
+export type ItemWithProgress = {
+  itemProgress: { status: StoredItemStatus } | null;
+};
 
 export function changeItemStatus(currentStatus: ItemStatus, isAnswerCorrect: boolean): ItemStatus {
   if (currentStatus === 'new') {
@@ -20,17 +29,6 @@ export function changeItemStatus(currentStatus: ItemStatus, isAnswerCorrect: boo
   }
   return isAnswerCorrect ? 'mastered' : 'problematic';
 }
-
-export type ItemStatusStats = {
-  new: number;
-  problematic: number;
-  learning: number;
-  mastered: number;
-};
-
-export type ItemWithProgress = {
-  itemProgress: { status: StoredItemStatus } | null;
-};
 
 export function calculateItemStatusStats(items: readonly ItemWithProgress[]): ItemStatusStats {
   const stats: ItemStatusStats = {
