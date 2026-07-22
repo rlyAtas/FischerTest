@@ -8,10 +8,7 @@ export function buildAllTrainingItems<T extends SortableItem>(items: readonly T[
   return sortItems(items);
 }
 
-export function buildTopicTrainingItems<T extends ItemWithTopic>(
-  items: readonly T[],
-  topicId: number,
-): T[] {
+export function buildTopicTrainingItems<T extends ItemWithTopic>(items: readonly T[], topicId: number): T[] {
   const itemsWithTopic = items.filter((item) => item.topicId === topicId);
   return sortItems(itemsWithTopic);
 }

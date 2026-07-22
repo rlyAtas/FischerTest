@@ -24,8 +24,6 @@ describe('checkSelectedAnswer', () => {
   });
 
   it('throws domain error when answer does not belong to item', () => {
-    expect(() => checkSelectedAnswer(item, 4)).toThrow(
-      new DomainError('answer_does_not_belong_to_item'),
-    );
+    expect(() => checkSelectedAnswer(item, 4)).toThrow(new DomainError('answer_does_not_belong_to_item'));
   });
 });

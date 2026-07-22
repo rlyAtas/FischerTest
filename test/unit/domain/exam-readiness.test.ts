@@ -1,55 +1,141 @@
 import { describe, expect, it } from 'vitest';
 
-import { buildExamItems, type ExamItem } from '../../../src/domain/exam-build';
 import type { ExamConfig } from '../../../src/domain/exam-config';
+import { calculateExamReadinessPercent, type ExamReadinessItem } from '../../../src/domain/exam-readiness';
 
 const examConfig: ExamConfig = {
   stateCode: 'NRW',
-  totalQuestions: 12,
-  questionsPerTopic: 4,
-  minCorrectAnswersTotal: 0,
-  minCorrectAnswersPerTopic: 0,
+  totalQuestions: 6,
+  questionsPerTopic: 3,
+  minCorrectAnswersTotal: 4,
+  minCorrectAnswersPerTopic: 2,
 };
+const simulationCount = 2;
 
-const items: ExamItem[] = [
-  { id: 1, topicId: 2, status: 'mastered', lastAnsweredAt: new Date('2026-01-03T00:00:00.000Z') },
-  { id: 2, topicId: 1, status: 'new', lastAnsweredAt: null },
-  { id: 3, topicId: 3, status: 'problematic', lastAnsweredAt: new Date('2026-01-04T00:00:00.000Z') },
-  { id: 4, topicId: 1, status: 'problematic', lastAnsweredAt: new Date('2026-01-05T00:00:00.000Z') },
-  { id: 5, topicId: 2, status: 'new', lastAnsweredAt: null },
-  { id: 6, topicId: 3, status: 'learning', lastAnsweredAt: new Date('2026-01-06T00:00:00.000Z') },
-  { id: 7, topicId: 1, status: 'new', lastAnsweredAt: null },
-  { id: 8, topicId: 2, status: 'mastered', lastAnsweredAt: new Date('2026-01-01T00:00:00.000Z') },
-  { id: 9, topicId: 3, status: 'new', lastAnsweredAt: null },
-  { id: 10, topicId: 1, status: 'mastered', lastAnsweredAt: new Date('2026-01-03T00:00:00.000Z') },
-  { id: 11, topicId: 1, status: 'learning', lastAnsweredAt: new Date('2026-01-07T00:00:00.000Z') },
-  { id: 12, topicId: 1, status: 'learning', lastAnsweredAt: new Date('2026-01-08T00:00:00.000Z') },
-  { id: 13, topicId: 1, status: 'problematic', lastAnsweredAt: new Date('2026-01-09T00:00:00.000Z') },
-  { id: 14, topicId: 1, status: 'mastered', lastAnsweredAt: new Date('2026-01-01T00:00:00.000Z') },
-  { id: 15, topicId: 1, status: 'mastered', lastAnsweredAt: null },
-  { id: 16, topicId: 1, status: 'mastered', lastAnsweredAt: new Date('2026-01-02T00:00:00.000Z') },
-  { id: 17, topicId: 2, status: 'problematic', lastAnsweredAt: new Date('2026-01-08T00:00:00.000Z') },
-  { id: 18, topicId: 3, status: 'mastered', lastAnsweredAt: new Date('2026-01-01T00:00:00.000Z') },
-];
+describe('calculateExamReadinessPercent', () => {
+  it('returns 100 when every selected item is mastered', () => {
+    const percent = calculateExamReadinessPercent(
+      createItems('mastered'),
+      examConfig,
+      keepOrderRandom,
+      keepAnswerRandom,
+      simulationCount,
+    );
 
-describe('buildExamItems', () => {
-  it('builds exam items by topic order, status priority and per-topic limit', () => {
-    const examItems = buildExamItems(items, examConfig, reverseRandom);
-
-    expect(examItems.map((item) => item.id)).toStrictEqual([7, 2, 13, 4, 5, 17, 8, 1, 9, 3, 6, 18]);
+    expect(percent).toBe(100);
   });
 
-  it('does not mutate source items', () => {
-    const originalItemIds = items.map((item) => item.id);
+  it('returns 0 when every selected item is new', () => {
+    const percent = calculateExamReadinessPercent(
+      createItems('new'),
+      examConfig,
+      keepOrderRandom,
+      keepAnswerRandom,
+      simulationCount,
+    );
 
-    buildExamItems(items, examConfig, reverseRandom);
+    expect(percent).toBe(0);
+  });
 
-    expect(items.map((item) => item.id)).toStrictEqual(originalItemIds);
+  it('returns 0 when every selected item is problematic', () => {
+    const percent = calculateExamReadinessPercent(
+      createItems('problematic'),
+      examConfig,
+      keepOrderRandom,
+      keepAnswerRandom,
+      simulationCount,
+    );
+
+    expect(percent).toBe(0);
+  });
+
+  it('calculates percent with deterministic learning answers', () => {
+    const percent = calculateExamReadinessPercent(
+      createItems('learning'),
+      examConfig,
+      keepOrderRandom,
+      createFixedRandom(
+        // biome-ignore format: the array should not be formatted
+        [
+          1, 1, 1, 1, 1, 1, 1, 1, 1, 1, // первая симуляция сдаётся
+          0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // вторая симуляция проваливается
+        ],
+      ),
+      simulationCount,
+    );
+
+    expect(percent).toBe(50);
+  });
+
+  it('returns 0 when total threshold is reached but topic threshold is not reached', () => {
+    const items: ExamReadinessItem[] = [
+      { topicId: 1, status: 'mastered' },
+      { topicId: 1, status: 'mastered' },
+      { topicId: 1, status: 'mastered' },
+      { topicId: 2, status: 'mastered' },
+      { topicId: 2, status: 'new' },
+      { topicId: 2, status: 'new' },
+    ];
+
+    const percent = calculateExamReadinessPercent(
+      items,
+      examConfig,
+      keepOrderRandom,
+      keepAnswerRandom,
+      simulationCount,
+    );
+
+    expect(percent).toBe(0);
+  });
+
+  it('returns 0 when simulation count is not positive', () => {
+    const simulationCount = 0;
+    const percent = calculateExamReadinessPercent(
+      createItems('mastered'),
+      examConfig,
+      keepOrderRandom,
+      keepAnswerRandom,
+      simulationCount,
+    );
+
+    expect(percent).toBe(0);
   });
 });
 
-/**
- * Возвращает всегда индекс = 0, используется для управления "случайным" перемешиванием массива методом Фишера-Йетса
- * Для пар элементов меняет их местами
- */
-const reverseRandom = () => 0;
+function createItems(status: ExamReadinessItem['status']): ExamReadinessItem[] {
+  return [
+    { topicId: 1, status },
+    { topicId: 1, status },
+    { topicId: 1, status },
+    { topicId: 2, status },
+    { topicId: 2, status },
+    { topicId: 2, status },
+  ];
+}
+
+const keepOrderRandom = (maxIndex: number) => maxIndex;
+const keepAnswerRandom = keepOrderRandom;
+
+function createFixedRandom(values: number[]) {
+  function* createValues() {
+    for (const value of values) {
+      yield value;
+    }
+  }
+
+  const randomValues = createValues();
+
+  return (maxIndex: number) => {
+    const nextValue = randomValues.next();
+
+    if (nextValue.done) {
+      throw new Error('No fixed random value for this call.');
+    }
+
+    if (nextValue.value < 0 || nextValue.value > maxIndex) {
+      throw new Error('Fixed random value is outside current max index.');
+    }
+
+    return nextValue.value;
+  };
+}

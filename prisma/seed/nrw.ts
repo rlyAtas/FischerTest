@@ -34,9 +34,7 @@ function validateDataNRW(languages: ExistingLanguage[]) {
     for (const language of languages) {
       if (language.code === baseContentLanguageCode) continue;
       if (!topic.translations[language.code]) {
-        throw new Error(
-          `${topic.name}: topic must have translations for language ${language.code}`,
-        );
+        throw new Error(`${topic.name}: topic must have translations for language ${language.code}`);
       }
     }
 
@@ -54,32 +52,24 @@ function validateDataNRW(languages: ExistingLanguage[]) {
       for (const language of languages) {
         if (language.code === baseContentLanguageCode) continue;
         if (!question.translations[language.code]) {
-          throw new Error(
-            `${topic.name} | ${question.text}: question must have translation for ${language.code}`,
-          );
+          throw new Error(`${topic.name} | ${question.text}: question must have translation for ${language.code}`);
         }
       }
 
       // Each question must have exactly one correct answer
       const correctAnswers = question.answers.filter((answer) => answer.isCorrect === true);
       if (correctAnswers.length !== 1) {
-        throw new Error(
-          `${topic.name} | ${question.text}: question must have exactly one correct answer`,
-        );
+        throw new Error(`${topic.name} | ${question.text}: question must have exactly one correct answer`);
       }
 
       for (const answer of question.answers) {
         //
         if (typeof answer.isCorrect !== 'boolean') {
-          throw new Error(
-            `${topic.name} | ${question.text} | ${answer.text}: isCorrect must be boolean`,
-          );
+          throw new Error(`${topic.name} | ${question.text} | ${answer.text}: isCorrect must be boolean`);
         }
         // Each answer must have translations
         if (!answer.translations) {
-          throw new Error(
-            `${topic.name} | ${question.text} | ${answer.text}: answer must have translations`,
-          );
+          throw new Error(`${topic.name} | ${question.text} | ${answer.text}: answer must have translations`);
         }
 
         // Each answer must have translations for all languages

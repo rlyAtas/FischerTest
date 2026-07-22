@@ -79,14 +79,12 @@ describe('buildFavoritesTrainingItems', () => {
   });
 
   it('throws domain error when no favorite items', () => {
-    expect(() => buildFavoritesTrainingItems([])).toThrow(
-      new DomainError('empty_favorites_training'),
-    );
+    expect(() => buildFavoritesTrainingItems([])).toThrow(new DomainError('empty_favorites_training'));
   });
 
   it('throws domain error when items exist but none are favorite', () => {
-    expect(() =>
-      buildFavoritesTrainingItems([{ id: 1, status: 'new', isFavorite: false }]),
-    ).toThrow(new DomainError('empty_favorites_training'));
+    expect(() => buildFavoritesTrainingItems([{ id: 1, status: 'new', isFavorite: false }])).toThrow(
+      new DomainError('empty_favorites_training'),
+    );
   });
 });

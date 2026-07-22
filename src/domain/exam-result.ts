@@ -24,10 +24,7 @@ export type ExamResult = {
   failureReason: ExamFailureReason | null;
 };
 
-export function calculateExamResult(
-  answers: readonly ExamAnswerResult[],
-  config: ExamConfig,
-): ExamResult {
+export function calculateExamResult(answers: readonly ExamAnswerResult[], config: ExamConfig): ExamResult {
   const correctAnswersByTopic: Record<number, number> = {};
 
   for (const answer of answers) {

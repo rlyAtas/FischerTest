@@ -7,6 +7,8 @@ import { calculateExamResult, type ExamAnswerResult } from './exam-result';
 import type { ItemStatus } from './item-status';
 import { type RandomIndexGenerator, randomIndexGenerator, shuffleItems } from './random';
 
+export type RandomAnswerGenerator = RandomIndexGenerator;
+
 export type ExamReadinessItem = {
   topicId: number;
   status: ItemStatus;
@@ -18,7 +20,8 @@ export type ExamReadinessItem = {
 export function calculateExamReadinessPercent(
   items: readonly ExamReadinessItem[],
   config: ExamConfig,
-  random: RandomIndexGenerator = randomIndexGenerator,
+  randomIndex: RandomIndexGenerator = randomIndexGenerator,
+  randomAnswer: RandomAnswerGenerator = randomIndexGenerator,
   quantityOfSimulations: number = 1000,
 ): number {
   if (quantityOfSimulations <= 0) {
@@ -26,8 +29,8 @@ export function calculateExamReadinessPercent(
   }
   let passedSimulations = 0;
   for (let index = 0; index < quantityOfSimulations; index += 1) {
-    const examItems = buildSimulationItems(items, config, random);
-    const examResult = calculateResultSimulation(examItems, config, random);
+    const examItems = buildSimulationItems(items, config, randomIndex);
+    const examResult = calculateResultSimulation(examItems, config, randomAnswer);
     passedSimulations += examResult ? 1 : 0;
   }
   return Math.round((passedSimulations / quantityOfSimulations) * 100);
@@ -39,7 +42,7 @@ export function calculateExamReadinessPercent(
 function calculateResultSimulation(
   items: readonly ExamReadinessItem[],
   config: ExamConfig,
-  random: RandomIndexGenerator = randomIndexGenerator,
+  random: RandomAnswerGenerator = randomIndexGenerator,
 ): boolean {
   const answers: ExamAnswerResult[] = [];
   for (const item of items) {
@@ -55,7 +58,7 @@ function calculateResultSimulation(
 /**
  * Получить результат ответа на один вопрос
  */
-function simulateAnswer(status: ItemStatus, random: RandomIndexGenerator): boolean {
+function simulateAnswer(status: ItemStatus, random: RandomAnswerGenerator): boolean {
   if (status === 'mastered') return true;
   if (status === 'learning') return random(1) === 1;
   return false;
