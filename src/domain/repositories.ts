@@ -65,7 +65,7 @@ export type FindItemsByTopicInput = {
   topicId: number;
 };
 
-export type FindFavoriteItemIdsInput = {
+export type FindFavoriteItemsInput = {
   userId: number;
   stateId: number;
 };
@@ -94,7 +94,6 @@ export type CreateTrainingInput = {
   type: TrainingType;
   topicId: number | null;
   itemIds: readonly number[];
-  startedAt: Date;
 };
 
 export type SaveTrainingItemAnswerInput = {
@@ -124,13 +123,13 @@ export type ItemRepository = {
   findItemsByState(input: FindItemsByStateInput): Promise<RepositoryItem[]>;
   findItemsByTopic(input: FindItemsByTopicInput): Promise<RepositoryItem[]>;
   findItemWithAnswers(itemId: number): Promise<RepositoryItemWithAnswers | null>;
+  findFavoriteItems(input: FindFavoriteItemsInput): Promise<RepositoryItem[]>;
 };
 
 /**
  * Чтение и изменение избранных вопросов пользователя.
  */
 export type FavoriteRepository = {
-  findFavoriteItemIds(input: FindFavoriteItemIdsInput): Promise<number[]>;
   addFavorite(input: FavoriteInput): Promise<void>;
   removeFavorite(input: FavoriteInput): Promise<void>;
 };
