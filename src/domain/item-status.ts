@@ -1,6 +1,6 @@
 export type ItemStatus = 'new' | 'problematic' | 'learning' | 'mastered';
 
-type StoredItemStatus = Exclude<ItemStatus, 'new'>;
+export type StoredItemStatus = Exclude<ItemStatus, 'new'>;
 
 export function getCurrentItemStatus(itemProgress: { status: StoredItemStatus } | null): ItemStatus {
   return itemProgress?.status ?? 'new';
