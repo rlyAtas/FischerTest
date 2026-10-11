@@ -3,20 +3,25 @@ import { type ExamConfig, nrwExamConfig } from '../domain/exam-config';
 import { buildAllTrainingItems, buildFavoritesTrainingItems, buildTopicTrainingItems } from '../domain/item-training';
 import type { RandomIndexGenerator } from '../domain/random';
 import type {
-  FavoriteRepository,
   ItemRepository,
   RepositoryItem,
   RepositoryTrainingWithItems,
   TrainingRepository,
 } from '../domain/repositories';
 
-export type CreateTrainingRepositories = {
-  items: ItemRepository;
-  favorites: FavoriteRepository;
-  trainings: TrainingRepository;
+type TrainingCreationItemRepository = Pick<
+  ItemRepository,
+  'findItemsByState' | 'findItemsByTopic' | 'findFavoriteItems'
+>;
+
+type TrainingCreationTrainingRepository = Pick<TrainingRepository, 'createTraining'>;
+
+export type TrainingCreationRepositories = {
+  items: TrainingCreationItemRepository;
+  trainings: TrainingCreationTrainingRepository;
 };
 
-export type CreateTrainingUseCaseInput =
+export type TrainingCreationParams =
   | {
       type: 'all';
       userId: number;
@@ -45,8 +50,8 @@ export type CreateTrainingUseCaseInput =
  * Создает тренировку нужного типа через repository-интерфейсы.
  */
 export async function createTraining(
-  input: CreateTrainingUseCaseInput,
-  repositories: CreateTrainingRepositories,
+  input: TrainingCreationParams,
+  repositories: TrainingCreationRepositories,
 ): Promise<RepositoryTrainingWithItems> {
   const trainingItems = await buildTrainingItems(input, repositories);
 
@@ -60,8 +65,8 @@ export async function createTraining(
 }
 
 async function buildTrainingItems(
-  input: CreateTrainingUseCaseInput,
-  repositories: CreateTrainingRepositories,
+  input: TrainingCreationParams,
+  repositories: TrainingCreationRepositories,
 ): Promise<RepositoryItem[]> {
   if (input.type === 'all') {
     const items = await repositories.items.findItemsByState({
@@ -85,13 +90,17 @@ async function buildTrainingItems(
       userId: input.userId,
       stateId: input.stateId,
     });
-
     return buildFavoritesTrainingItems(items);
   }
-  const items = await repositories.items.findItemsByState({
-    userId: input.userId,
-    stateId: input.stateId,
-  });
 
-  return buildExamItems(items, input.examConfig ?? nrwExamConfig, input.random);
+  if (input.type === 'exam') {
+    const items = await repositories.items.findItemsByState({
+      userId: input.userId,
+      stateId: input.stateId,
+    });
+    return buildExamItems(items, input.examConfig ?? nrwExamConfig, input.random);
+  }
+
+  const unhandledInput: never = input;
+  return unhandledInput;
 }
