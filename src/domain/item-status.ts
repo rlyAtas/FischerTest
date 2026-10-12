@@ -17,7 +17,7 @@ export type ItemWithProgress = {
   itemProgress: { status: StoredItemStatus } | null;
 };
 
-export function changeItemStatus(currentStatus: ItemStatus, isAnswerCorrect: boolean): ItemStatus {
+export function changeItemStatus(currentStatus: ItemStatus, isAnswerCorrect: boolean): StoredItemStatus {
   if (currentStatus === 'new') {
     return isAnswerCorrect ? 'learning' : 'problematic';
   }

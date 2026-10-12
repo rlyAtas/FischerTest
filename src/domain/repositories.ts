@@ -31,6 +31,11 @@ export type ItemProgress = {
   lastAnsweredAt: Date;
 };
 
+export type ItemProgressByItemInput = {
+  userId: number;
+  itemId: number;
+};
+
 export type Training = {
   id: number;
   type: TrainingType;
@@ -121,7 +126,7 @@ export type TopicRepository = {
  * Чтение вопросов вместе с текущим статусом пользователя.
  */
 export type ItemRepository = {
-  findItemsByState(input: ItemsByStateInput): Promise<TrainingItemCandidate[]>;
+  findItemsByState(input: ItemsByStateInput): Promise<TrainingItemCandidate[]>; // TODO или передавать stateId и userId?
   findItemsByTopic(input: ItemsByTopicInput): Promise<TrainingItemCandidate[]>;
   findItemWithAnswers(itemId: number): Promise<ItemWithAnswers | null>;
   findFavoriteItems(input: FavoriteItemsByStateInput): Promise<TrainingItemCandidate[]>;
@@ -140,6 +145,7 @@ export type FavoriteRepository = {
  */
 export type ProgressRepository = {
   findItemProgressByState(input: ItemsByStateInput): Promise<ItemProgress[]>;
+  findItemProgressByItem(input: ItemProgressByItemInput): Promise<ItemProgress | null>;
   upsertItemProgress(input: UpsertItemProgressInput): Promise<void>;
   upsertUserProgress(input: UpsertUserProgressInput): Promise<void>;
 };
