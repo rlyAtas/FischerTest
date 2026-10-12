@@ -2,7 +2,12 @@ import { buildExamItems } from '../domain/exam-build';
 import { type ExamConfig, nrwExamConfig } from '../domain/exam-config';
 import { buildAllTrainingItems, buildFavoritesTrainingItems, buildTopicTrainingItems } from '../domain/item-training';
 import type { RandomIndexGenerator } from '../domain/random';
-import type { Item, ItemRepository, TrainingRepository, TrainingWithItems } from '../domain/repositories';
+import type {
+  ItemRepository,
+  TrainingItemCandidate,
+  TrainingRepository,
+  TrainingWithItems,
+} from '../domain/repositories';
 
 type TrainingCreationItemRepository = Pick<
   ItemRepository,
@@ -62,7 +67,7 @@ export async function createTraining(
 async function buildTrainingItems(
   input: TrainingCreationParams,
   repositories: TrainingCreationRepositories,
-): Promise<Item[]> {
+): Promise<TrainingItemCandidate[]> {
   if (input.type === 'all') {
     const items = await repositories.items.findItemsByState({
       userId: input.userId,

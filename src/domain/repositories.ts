@@ -13,14 +13,15 @@ export type Answer = {
   isCorrect: boolean;
 };
 
-export type Item = {
+export type TrainingItemCandidate = {
   id: number;
   topicId: number;
   status: ItemStatus;
   lastAnsweredAt: Date | null;
 };
 
-export type ItemWithAnswers = Item & {
+export type ItemWithAnswers = {
+  id: number;
   answers: Answer[];
 };
 
@@ -120,10 +121,10 @@ export type TopicRepository = {
  * Чтение вопросов вместе с текущим статусом пользователя.
  */
 export type ItemRepository = {
-  findItemsByState(input: ItemsByStateInput): Promise<Item[]>;
-  findItemsByTopic(input: ItemsByTopicInput): Promise<Item[]>;
+  findItemsByState(input: ItemsByStateInput): Promise<TrainingItemCandidate[]>;
+  findItemsByTopic(input: ItemsByTopicInput): Promise<TrainingItemCandidate[]>;
   findItemWithAnswers(itemId: number): Promise<ItemWithAnswers | null>;
-  findFavoriteItems(input: FavoriteItemsByStateInput): Promise<Item[]>;
+  findFavoriteItems(input: FavoriteItemsByStateInput): Promise<TrainingItemCandidate[]>;
 };
 
 /**
