@@ -1,16 +1,20 @@
+/**
+ *  Проверяет правильность выбранного ответа на вопрос; если ответ не принадлежит вопросу, выбрасывает доменную ошибку.
+ */
+
 import { DomainError } from './domain-error';
 
-export type ItemAnswer = {
+export type AnswerForChecking = {
   id: number;
   isCorrect: boolean;
 };
 
-export type Item = {
+export type ItemForChecking = {
   id: number;
-  answers: ItemAnswer[];
+  answers: AnswerForChecking[];
 };
 
-export function checkSelectedAnswer(item: Item, answerId: number): boolean {
+export function checkSelectedAnswer(item: ItemForChecking, answerId: number): boolean {
   const answer = item.answers.find((answer) => answer.id === answerId);
 
   if (!answer) {

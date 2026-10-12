@@ -1,29 +1,31 @@
 import { describe, expect, it } from 'vitest';
 
 import { DomainError } from '../../../src/domain/domain-error';
-import { checkSelectedAnswer, type Item } from '../../../src/domain/item-correct';
-
-const item: Item = {
-  id: 1,
-  answers: [
-    { id: 1, isCorrect: true },
-    { id: 2, isCorrect: false },
-    { id: 3, isCorrect: false },
-  ],
-};
+import { checkSelectedAnswer, type ItemForChecking } from '../../../src/domain/item-correct';
 
 describe('checkSelectedAnswer', () => {
-  it.each<{
-    answerId: number;
-    expectedCorrect: boolean;
-  }>([
-    { answerId: 1, expectedCorrect: true },
-    { answerId: 2, expectedCorrect: false },
-  ])('returns $expectedCorrect', ({ answerId, expectedCorrect }) => {
-    expect(checkSelectedAnswer(item, answerId)).toBe(expectedCorrect);
+  const item: ItemForChecking = {
+    id: 1,
+    answers: [
+      { id: 10, isCorrect: false },
+      { id: 20, isCorrect: true },
+    ],
+  };
+
+  it('answer is correct', () => {
+    expect(checkSelectedAnswer(item, 20)).toBe(true);
+  });
+
+  it('answer is incorrect', () => {
+    expect(checkSelectedAnswer(item, 10)).toBe(false);
   });
 
   it('throws domain error when answer does not belong to item', () => {
-    expect(() => checkSelectedAnswer(item, 4)).toThrow(new DomainError('answer_does_not_belong_to_item'));
+    expect(() => checkSelectedAnswer(item, 30)).toThrowError(
+      expect.objectContaining({
+        constructor: DomainError,
+        code: 'answer_does_not_belong_to_item',
+      }),
+    );
   });
 });
