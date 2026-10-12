@@ -1,36 +1,36 @@
 import type { ItemStatus, StoredItemStatus } from './item-status';
 import type { TrainingType } from './training';
 
-export type RepositoryTopic = {
+export type Topic = {
   id: number;
   stateId: number;
   name: string;
 };
 
-export type RepositoryAnswer = {
+export type Answer = {
   id: number;
   itemId: number;
   isCorrect: boolean;
 };
 
-export type RepositoryItem = {
+export type Item = {
   id: number;
   topicId: number;
   status: ItemStatus;
   lastAnsweredAt: Date | null;
 };
 
-export type RepositoryItemWithAnswers = RepositoryItem & {
-  answers: RepositoryAnswer[];
+export type ItemWithAnswers = Item & {
+  answers: Answer[];
 };
 
-export type RepositoryItemProgress = {
+export type ItemProgress = {
   itemId: number;
   status: StoredItemStatus;
   lastAnsweredAt: Date;
 };
 
-export type RepositoryTraining = {
+export type Training = {
   id: number;
   type: TrainingType;
   userId: number;
@@ -40,7 +40,7 @@ export type RepositoryTraining = {
   finishedAt: Date | null;
 };
 
-export type RepositoryTrainingItem = {
+export type TrainingItem = {
   id: number;
   trainingId: number;
   itemId: number;
@@ -50,27 +50,27 @@ export type RepositoryTrainingItem = {
   answeredAt: Date | null;
 };
 
-export type RepositoryTrainingWithItems = RepositoryTraining & {
-  items: RepositoryTrainingItem[];
+export type TrainingWithItems = Training & {
+  items: TrainingItem[];
 };
 
-export type FindItemsByStateInput = {
+export type ItemsByStateInput = {
   userId: number;
   stateId: number;
 };
 
-export type FindItemsByTopicInput = {
+export type ItemsByTopicInput = {
   userId: number;
   stateId: number;
   topicId: number;
 };
 
-export type FindFavoriteItemsInput = {
+export type FavoriteItemsByStateInput = {
   userId: number;
   stateId: number;
 };
 
-export type FavoriteInput = {
+export type FavoriteItemInput = {
   userId: number;
   itemId: number;
 };
@@ -113,32 +113,32 @@ export type FinishTrainingInput = {
  * Чтение тем выбранной федеральной земли.
  */
 export type TopicRepository = {
-  findTopicsByState(stateId: number): Promise<RepositoryTopic[]>;
+  findTopicsByState(stateId: number): Promise<Topic[]>;
 };
 
 /**
  * Чтение вопросов вместе с текущим статусом пользователя.
  */
 export type ItemRepository = {
-  findItemsByState(input: FindItemsByStateInput): Promise<RepositoryItem[]>;
-  findItemsByTopic(input: FindItemsByTopicInput): Promise<RepositoryItem[]>;
-  findItemWithAnswers(itemId: number): Promise<RepositoryItemWithAnswers | null>;
-  findFavoriteItems(input: FindFavoriteItemsInput): Promise<RepositoryItem[]>;
+  findItemsByState(input: ItemsByStateInput): Promise<Item[]>;
+  findItemsByTopic(input: ItemsByTopicInput): Promise<Item[]>;
+  findItemWithAnswers(itemId: number): Promise<ItemWithAnswers | null>;
+  findFavoriteItems(input: FavoriteItemsByStateInput): Promise<Item[]>;
 };
 
 /**
  * Чтение и изменение избранных вопросов пользователя.
  */
 export type FavoriteRepository = {
-  addFavorite(input: FavoriteInput): Promise<void>;
-  removeFavorite(input: FavoriteInput): Promise<void>;
+  addFavorite(input: FavoriteItemInput): Promise<void>;
+  removeFavorite(input: FavoriteItemInput): Promise<void>;
 };
 
 /**
  * Чтение и запись прогресса пользователя.
  */
 export type ProgressRepository = {
-  findItemProgressByState(input: FindItemsByStateInput): Promise<RepositoryItemProgress[]>;
+  findItemProgressByState(input: ItemsByStateInput): Promise<ItemProgress[]>;
   upsertItemProgress(input: UpsertItemProgressInput): Promise<void>;
   upsertUserProgress(input: UpsertUserProgressInput): Promise<void>;
 };
@@ -147,8 +147,8 @@ export type ProgressRepository = {
  * Создание тренировок, чтение попытки и запись ответов.
  */
 export type TrainingRepository = {
-  createTraining(input: CreateTrainingInput): Promise<RepositoryTrainingWithItems>;
-  findTrainingById(trainingId: number): Promise<RepositoryTrainingWithItems | null>;
+  createTraining(input: CreateTrainingInput): Promise<TrainingWithItems>;
+  findTrainingById(trainingId: number): Promise<TrainingWithItems | null>;
   saveTrainingItemAnswer(input: SaveTrainingItemAnswerInput): Promise<void>;
   finishTraining(input: FinishTrainingInput): Promise<void>;
 };

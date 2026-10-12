@@ -9,11 +9,7 @@ import { describe, expect, it } from 'vitest';
 
 import { DomainError } from '../../../src/domain/domain-error';
 import type { ExamConfig } from '../../../src/domain/exam-config';
-import type {
-  CreateTrainingInput,
-  RepositoryItem,
-  RepositoryTrainingWithItems,
-} from '../../../src/domain/repositories';
+import type { CreateTrainingInput, Item, TrainingWithItems } from '../../../src/domain/repositories';
 import { createTraining, type TrainingCreationRepositories } from '../../../src/use-cases/training-create';
 
 const userId = 10;
@@ -114,7 +110,7 @@ describe('createTraining', () => {
 });
 
 function createTrainingRepositories(
-  sourceItems: readonly RepositoryItem[],
+  sourceItems: readonly Item[],
   favoriteItemIds: readonly number[] = [],
 ): TrainingCreationRepositories {
   return {
@@ -138,14 +134,14 @@ function createTrainingRepositories(
   };
 }
 
-function createItem(input: Pick<RepositoryItem, 'id' | 'topicId' | 'status'>): RepositoryItem {
+function createItem(input: Pick<Item, 'id' | 'topicId' | 'status'>): Item {
   return {
     ...input,
     lastAnsweredAt: null,
   };
 }
 
-function createTrainingResult(input: CreateTrainingInput): RepositoryTrainingWithItems {
+function createTrainingResult(input: CreateTrainingInput): TrainingWithItems {
   return {
     id: 1,
     type: input.type,
