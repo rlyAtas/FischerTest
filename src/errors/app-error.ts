@@ -7,6 +7,7 @@ export type AppErrorCode =
   | 'training_item_not_found'
   | 'training_item_already_answered'
   | 'exam_training_answer_not_allowed'
+  | 'exam_training_finish_not_allowed'
   | 'item_not_found';
 
 const appErrorMessages: Record<AppErrorCode, string> = {
@@ -18,6 +19,7 @@ const appErrorMessages: Record<AppErrorCode, string> = {
   training_item_not_found: 'Training item was not found.',
   training_item_already_answered: 'Training item is already answered.',
   exam_training_answer_not_allowed: 'Use exam answer use-case for exam training.',
+  exam_training_finish_not_allowed: 'Use exam finish use-case for exam training.',
   item_not_found: 'Item was not found.',
 };
 
