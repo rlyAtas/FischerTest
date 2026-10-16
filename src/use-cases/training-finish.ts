@@ -33,8 +33,10 @@ export async function finishTraining(
     throw new AppError('training_not_found');
   }
 
-  if (training.type === 'exam') {
-    throw new AppError('exam_training_finish_not_allowed');
+  const isRegularTraining = training.type === 'all' || training.type === 'topic' || training.type === 'favorites';
+
+  if (!isRegularTraining) {
+    throw new AppError('training_type_not_supported');
   }
 
   if (training.finishedAt !== null) {

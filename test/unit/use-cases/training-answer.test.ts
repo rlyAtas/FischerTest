@@ -56,7 +56,7 @@ describe('answerTrainingItem', () => {
     const result = answerTrainingItem(answerParams, repositories);
 
     await expect(result).rejects.toBeInstanceOf(AppError);
-    await expect(result).rejects.toMatchObject({ code: 'exam_training_answer_not_allowed' });
+    await expect(result).rejects.toMatchObject({ code: 'training_type_not_supported' });
     expect(repositoryData).toStrictEqual(initialRepositoryData);
   });
 
