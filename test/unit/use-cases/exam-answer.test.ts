@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
-
-import { DomainError } from '../../../src/domain/domain-error';
 import type { ItemWithAnswers, TrainingWithItems, UpsertItemProgressInput } from '../../../src/domain/repositories';
+import { AppError } from '../../../src/errors/app-error';
 import { type AnswerExamItemRepositories, answerExamItem } from '../../../src/use-cases/exam-answer';
 
 const trainingId = 1;
@@ -71,7 +70,7 @@ describe('answerExamItem', () => {
 
     const result = answerExamItem({ ...answerParams, trainingId: missingTrainingId }, repositories);
 
-    await expect(result).rejects.toBeInstanceOf(DomainError);
+    await expect(result).rejects.toBeInstanceOf(AppError);
     await expect(result).rejects.toMatchObject({ code: 'training_not_found' });
     expect(repositoryData).toStrictEqual(initialRepositoryData);
   });
@@ -86,7 +85,7 @@ describe('answerExamItem', () => {
 
       const result = answerExamItem(answerParams, repositories);
 
-      await expect(result).rejects.toBeInstanceOf(DomainError);
+      await expect(result).rejects.toBeInstanceOf(AppError);
       await expect(result).rejects.toMatchObject({ code: 'training_is_not_exam' });
       expect(repositoryData).toStrictEqual(initialRepositoryData);
     },
@@ -104,7 +103,7 @@ describe('answerExamItem', () => {
       repositories,
     );
 
-    await expect(result).rejects.toBeInstanceOf(DomainError);
+    await expect(result).rejects.toBeInstanceOf(AppError);
     await expect(result).rejects.toMatchObject({ code: 'training_already_finished' });
     expect(repositoryData).toStrictEqual(initialRepositoryData);
   });
@@ -116,7 +115,7 @@ describe('answerExamItem', () => {
 
     const result = answerExamItem({ ...answerParams, itemId: otherItemId }, repositories);
 
-    await expect(result).rejects.toBeInstanceOf(DomainError);
+    await expect(result).rejects.toBeInstanceOf(AppError);
     await expect(result).rejects.toMatchObject({ code: 'training_item_not_found' });
     expect(repositoryData).toStrictEqual(initialRepositoryData);
   });
@@ -129,7 +128,7 @@ describe('answerExamItem', () => {
 
     const result = answerExamItem(answerParams, repositories);
 
-    await expect(result).rejects.toBeInstanceOf(DomainError);
+    await expect(result).rejects.toBeInstanceOf(AppError);
     await expect(result).rejects.toMatchObject({ code: 'item_not_found' });
     expect(repositoryData).toStrictEqual(initialRepositoryData);
   });
@@ -141,7 +140,7 @@ describe('answerExamItem', () => {
 
     const result = answerExamItem({ ...answerParams, answerId: otherAnswerId }, repositories);
 
-    await expect(result).rejects.toBeInstanceOf(DomainError);
+    await expect(result).rejects.toBeInstanceOf(AppError);
     await expect(result).rejects.toMatchObject({ code: 'answer_does_not_belong_to_item' });
     expect(repositoryData).toStrictEqual(initialRepositoryData);
   });

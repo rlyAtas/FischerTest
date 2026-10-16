@@ -1,6 +1,6 @@
-import { AppError } from '../errors/app-error';
 import { checkSelectedAnswer } from '../domain/item-correct';
 import type { ItemRepository, TrainingRepository } from '../domain/repositories';
+import { AppError } from '../errors/app-error';
 
 type AnswerExamItemTrainingRepository = Pick<TrainingRepository, 'findTrainingById' | 'saveTrainingItemAnswer'>;
 

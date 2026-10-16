@@ -1,7 +1,7 @@
-import { DomainError } from '../domain/domain-error';
 import { checkSelectedAnswer } from '../domain/item-correct';
 import { changeItemStatus, getCurrentItemStatus, type StoredItemStatus } from '../domain/item-status';
 import type { ItemRepository, ProgressRepository, TrainingRepository } from '../domain/repositories';
+import { AppError } from '../errors/app-error';
 
 type AnswerTrainingItemTrainingRepository = Pick<TrainingRepository, 'findTrainingById' | 'saveTrainingItemAnswer'>;
 
@@ -37,31 +37,31 @@ export async function answerTrainingItem(
   const training = await repositories.trainings.findTrainingById(input.trainingId);
 
   if (training === null) {
-    throw new DomainError('training_not_found');
+    throw new AppError('training_not_found');
   }
 
   if (training.type === 'exam') {
-    throw new DomainError('exam_training_answer_not_allowed');
+    throw new AppError('exam_training_answer_not_allowed');
   }
 
   if (training.finishedAt !== null) {
-    throw new DomainError('training_already_finished');
+    throw new AppError('training_already_finished');
   }
 
   const trainingItem = training.items.find((item) => item.itemId === input.itemId);
 
   if (trainingItem === undefined) {
-    throw new DomainError('training_item_not_found');
+    throw new AppError('training_item_not_found');
   }
 
   if (trainingItem.answerId !== null) {
-    throw new DomainError('training_item_already_answered');
+    throw new AppError('training_item_already_answered');
   }
 
   const item = await repositories.items.findItemWithAnswers(input.itemId);
 
   if (item === null) {
-    throw new DomainError('item_not_found');
+    throw new AppError('item_not_found');
   }
 
   const isCorrect = checkSelectedAnswer(item, input.answerId);

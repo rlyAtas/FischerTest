@@ -1,4 +1,4 @@
-import { DomainError } from './domain-error';
+import { AppError } from '../errors/app-error';
 import { type SortableItem, sortItems } from './item-sort';
 
 export type ItemWithTopic = SortableItem & { topicId: number };
@@ -14,7 +14,7 @@ export function buildTopicTrainingItems<T extends ItemWithTopic>(items: readonly
 
 export function buildFavoritesTrainingItems<T extends SortableItem>(items: readonly T[]): T[] {
   if (items.length === 0) {
-    throw new DomainError('empty_favorites_training');
+    throw new AppError('empty_favorites_training');
   }
 
   return sortItems(items);

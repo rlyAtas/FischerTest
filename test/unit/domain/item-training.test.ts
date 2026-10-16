@@ -1,5 +1,4 @@
 import { describe, expect, it } from 'vitest';
-import { DomainError } from '../../../src/domain/domain-error';
 import type { SortableItem } from '../../../src/domain/item-sort';
 import {
   buildAllTrainingItems,
@@ -7,6 +6,7 @@ import {
   buildTopicTrainingItems,
   type ItemWithTopic,
 } from '../../../src/domain/item-training';
+import { AppError } from '../../../src/errors/app-error';
 
 describe('buildAllTrainingItems', () => {
   const items: SortableItem[] = [
@@ -73,7 +73,7 @@ describe('buildFavoritesTrainingItems', () => {
     ]);
   });
 
-  it('throws domain error when no favorite items', () => {
-    expect(() => buildFavoritesTrainingItems([])).toThrow(new DomainError('empty_favorites_training'));
+  it('throws error when no favorite items', () => {
+    expect(() => buildFavoritesTrainingItems([])).toThrow(new AppError('empty_favorites_training'));
   });
 });

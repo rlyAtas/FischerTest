@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
-
-import { DomainError } from '../../../src/domain/domain-error';
 import { checkSelectedAnswer, type ItemForChecking } from '../../../src/domain/item-correct';
+import { AppError } from '../../../src/errors/app-error';
 
 describe('checkSelectedAnswer', () => {
   const item: ItemForChecking = {
@@ -20,10 +19,10 @@ describe('checkSelectedAnswer', () => {
     expect(checkSelectedAnswer(item, 10)).toBe(false);
   });
 
-  it('throws domain error when answer does not belong to item', () => {
+  it('throws error when answer does not belong to item', () => {
     expect(() => checkSelectedAnswer(item, 30)).toThrowError(
       expect.objectContaining({
-        constructor: DomainError,
+        constructor: AppError,
         code: 'answer_does_not_belong_to_item',
       }),
     );

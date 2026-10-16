@@ -1,9 +1,9 @@
 /**
  * Проверяет правильность выбранного ответа на вопрос
- * Если ответ не принадлежит вопросу, выбрасывает доменную ошибку.
+ * Если ответ не принадлежит вопросу, выбрасывает ошибку приложения.
  */
 
-import { DomainError } from './domain-error';
+import { AppError } from '../errors/app-error';
 
 export type AnswerForChecking = {
   id: number;
@@ -19,7 +19,7 @@ export function checkSelectedAnswer(item: ItemForChecking, answerId: number): bo
   const answer = item.answers.find((answer) => answer.id === answerId);
 
   if (!answer) {
-    throw new DomainError('answer_does_not_belong_to_item');
+    throw new AppError('answer_does_not_belong_to_item');
   }
 
   return answer.isCorrect;

@@ -6,10 +6,9 @@
  */
 
 import { describe, expect, it } from 'vitest';
-
-import { DomainError } from '../../../src/domain/domain-error';
 import type { ExamConfig } from '../../../src/domain/exam-config';
 import type { CreateTrainingInput, TrainingItemCandidate, TrainingWithItems } from '../../../src/domain/repositories';
+import { AppError } from '../../../src/errors/app-error';
 import { createTraining, type TrainingCreationRepositories } from '../../../src/use-cases/training-create';
 
 const userId = 10;
@@ -86,7 +85,7 @@ describe('createTraining', () => {
     const repositories = createTrainingRepositories([createItem({ id: 1, topicId: 1, status: 'new' })], []);
 
     await expect(createTraining({ type: 'favorites', userId, stateId }, repositories)).rejects.toThrow(
-      new DomainError('empty_favorites_training'),
+      new AppError('empty_favorites_training'),
     );
   });
 
