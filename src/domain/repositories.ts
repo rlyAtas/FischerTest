@@ -126,6 +126,10 @@ export type TopicRepository = {
  * Чтение вопросов вместе с текущим статусом пользователя.
  */
 export type ItemRepository = {
+  /**
+   * Проверяет существование вопроса без загрузки его содержимого и вариантов ответов.
+   */
+  existsItem(itemId: number): Promise<boolean>;
   findItemsByState(input: ItemsByStateInput): Promise<TrainingItemCandidate[]>; // TODO или передавать stateId и userId?
   findItemsByTopic(input: ItemsByTopicInput): Promise<TrainingItemCandidate[]>;
   findItemWithAnswers(itemId: number): Promise<ItemWithAnswers | null>;
@@ -136,7 +140,13 @@ export type ItemRepository = {
  * Чтение и изменение избранных вопросов пользователя.
  */
 export type FavoriteRepository = {
+  /**
+   * Добавляет вопрос в избранное. Если пара userId/itemId уже существует, успешно завершается без дубликата.
+   */
   addFavorite(input: FavoriteItemInput): Promise<void>;
+  /**
+   * Удаляет вопрос из избранного. Если пара userId/itemId отсутствует, успешно завершается без изменений.
+   */
   removeFavorite(input: FavoriteItemInput): Promise<void>;
 };
 
