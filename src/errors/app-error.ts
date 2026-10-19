@@ -7,6 +7,7 @@ export type AppErrorCode =
   | 'training_item_not_found'
   | 'training_item_already_answered'
   | 'training_type_not_supported'
+  | 'invalid_training_item_answer'
   | 'item_not_found';
 
 const appErrorMessages: Record<AppErrorCode, string> = {
@@ -18,6 +19,7 @@ const appErrorMessages: Record<AppErrorCode, string> = {
   training_item_not_found: 'Training item was not found.',
   training_item_already_answered: 'Training item is already answered.',
   training_type_not_supported: 'Training type is not supported by this use-case.',
+  invalid_training_item_answer: 'Saved training item answer is incomplete.',
   item_not_found: 'Item was not found.',
 };
 
