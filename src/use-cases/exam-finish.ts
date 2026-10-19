@@ -45,7 +45,7 @@ export async function finishExam(input: FinishExamParams, repositories: FinishEx
     throw new AppError('training_already_finished');
   }
 
-  // Получаем ответы на вопросы и обновляем прогресс
+  // Проверяем ответы и готовим изменения прогресса до первой записи.
   const items = await repositories.items.findItemsByState({
     userId: training.userId,
     stateId: training.stateId,
@@ -83,26 +83,23 @@ export async function finishExam(input: FinishExamParams, repositories: FinishEx
   const examConfig = input.examConfig ?? nrwExamConfig;
   const examResult = calculateExamResult(answers, examConfig);
 
-  // Получаем новые статусы вопросов для расчёта готовности к реальному экзамену
-  const progressByItemId = new Map(progressUpdates.map((progress) => [progress.itemId, progress]));
-  const updatedItems = items.map((item) => {
-    const progress = progressByItemId.get(item.id);
-    return progress === undefined
-      ? item
-      : { ...item, status: progress.status, lastAnsweredAt: progress.lastAnsweredAt };
+  // Записываем прогресс вопросов
+  for (const progress of progressUpdates) {
+    await repositories.progress.upsertItemProgress(progress);
+  }
+
+  // Повторное чтение возвращает актуальные статусы после записи прогресса, рассчитываем готовность к реальному экзамену
+  const currentItems = await repositories.items.findItemsByState({
+    userId: training.userId,
+    stateId: training.stateId,
   });
   const readinessPercent = calculateExamReadinessPercent(
-    updatedItems,
+    currentItems,
     examConfig,
     input.randomIndex,
     input.randomAnswer,
     input.quantityOfSimulations,
   );
-
-  // Записываем прогресс вопросов
-  for (const progress of progressUpdates) {
-    await repositories.progress.upsertItemProgress(progress);
-  }
 
   await repositories.trainings.finishTraining({
     trainingId: input.trainingId,
